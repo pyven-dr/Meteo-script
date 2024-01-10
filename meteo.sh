@@ -1,8 +1,8 @@
 #!/bin/sh
 
-echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=45.7805&longitude=4.7464&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&timezone=auto" 2> /dev/null) > meteo.json
+echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=45.7805&longitude=4.7464&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=auto" 2> /dev/null) > /sgoinfre/goinfre/Perso/pyven-dr/message/meteo.json
 
-input_file="meteo.json"
+input_file="/sgoinfre/goinfre/Perso/pyven-dr/message/meteo.json"
 
 current_time=`jq -r '.current.time' "$input_file"`
 current_temperature=`jq -r '.current.temperature_2m' "$input_file"`
@@ -17,6 +17,7 @@ wind_speed_unit=`jq -r '.current_units.wind_speed_10m' "$input_file"`
 wind_direction_unit=`jq -r '.current_units.wind_direction_10m' "$input_file"`
 sunrise=`jq -r '.daily.sunrise[0]' "$input_file"`
 sunset=`jq -r '.daily.sunset[0]' "$input_file"`
+
 
 echo "\e[0;34m
 ------------------------------------------------------
@@ -69,4 +70,21 @@ echo "\e[1;34mCurrent precipitation : $current_precipitation$precipitation_unit 
 echo "\e[1;36mCurrent wind speed : $wind_speed$wind_speed_unit 🍃\n\e[0m"
 
 echo "\e[1;36mCurrent wind direction : $wind_direction$wind_direction_unit 🍃\n\e[0m"
+
+#-------------------------------weather-forecast-----------------------------------------
+echo "\e[0;34m
+--------------------------------------------------------------------------
+|     Date      Temperature     Precipitation  Precipitation  Wind speed |
+|                                Probability       Hours                 |
+--------------------------------------------------------------------------\e[0m\n\n"
+
+for i in 0 1 2 3 4 5 6; do
+  time=$(jq -r ".daily.time[$i]" $input_file)
+  temp_min=$(jq -r ".daily.temperature_2m_min[$i]" $input_file)
+  temp_max=$(jq -r ".daily.temperature_2m_max[$i]" $input_file)
+  prec_prob=$(jq -r ".daily.precipitation_probability_max[$i]" $input_file)
+  prec_hours=$(jq -r ".daily.precipitation_hours[$i]" $input_file)
+  wind_speed_d=$(jq -r ".daily.wind_speed_10m_max[$i]" $input_file)
+  echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
+done
 
