@@ -1,8 +1,9 @@
 #!/bin/sh
 
-echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=45.7805&longitude=4.7464&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=auto" 2> /dev/null) > /sgoinfre/goinfre/Perso/pyven-dr/message/meteo.json
+mkdir -p -m 777 /home/$USER/.meteo
+echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=45.7805&longitude=4.7464&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=auto" 2> /dev/null) > /home/$USER/.meteo/meteo.json
 
-input_file="/sgoinfre/goinfre/Perso/pyven-dr/message/meteo.json"
+input_file="/home/$USER/.meteo/meteo.json"
 
 current_time=`jq -r '.current.time' "$input_file"`
 current_temperature=`jq -r '.current.temperature_2m' "$input_file"`
@@ -96,6 +97,8 @@ while [ $i -lt 8 ]; do
   	echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
   	i=`expr $i + 1`
 done
+
+rm -rf /home/$USER/.meteo
 
 echo -n "\e[1;33mMeteo has been optimized !\e[0m"
 echo "\e[1;33m - pyven-dr\n\e[0m"
