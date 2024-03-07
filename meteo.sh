@@ -85,14 +85,17 @@ prec_probs=$(jq -r '.daily.precipitation_probability_max[]' "$input_file")
 prec_hourss=$(jq -r '.daily.precipitation_hours[]' "$input_file")
 wind_speed_ds=$(jq -r '.daily.wind_speed_10m_max[]' "$input_file")
 
-i=0
-while [ $i -lt 6 ]; do
-  time=$(echo "$times" | sed -n "${i+1}p")
-  temp_min=$(echo "$temp_mins" | sed -n "${i+1}p")
-  temp_max=$(echo "$temp_maxs" | sed -n "${i+1}p")
-  prec_prob=$(echo "$prec_probs" | sed -n "${i+1}p")
-  prec_hours=$(echo "$prec_hourss" | sed -n "${i+1}p")
-  wind_speed_d=$(echo "$wind_speed_ds" | sed -n "${i+1}p")
-  echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
-  i=`expr $i + 1`
+i=2
+while [ $i -lt 8 ]; do
+	time=$(echo "$times" | sed -n "${i}p")
+  	temp_min=$(echo "$temp_mins" | sed -n "${i}p")
+  	temp_max=$(echo "$temp_maxs" | sed -n "${i}p")
+  	prec_prob=$(echo "$prec_probs" | sed -n "${i}p")
+  	prec_hours=$(echo "$prec_hourss" | sed -n "${i}p")
+  	wind_speed_d=$(echo "$wind_speed_ds" | sed -n "${i}p")
+  	echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
+  	i=`expr $i + 1`
 done
+
+echo -n "\e[1;33mMeteo has been optimized !\e[0m"
+echo "\e[1;33m - pyven-dr\n\e[0m"
