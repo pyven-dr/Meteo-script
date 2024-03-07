@@ -78,13 +78,21 @@ echo "\e[0;34m
 |                                Probability       Hours                 |
 --------------------------------------------------------------------------\e[0m\n\n"
 
-for i in 0 1 2 3 4 5 6; do
-  time=$(jq -r ".daily.time[$i]" $input_file)
-  temp_min=$(jq -r ".daily.temperature_2m_min[$i]" $input_file)
-  temp_max=$(jq -r ".daily.temperature_2m_max[$i]" $input_file)
-  prec_prob=$(jq -r ".daily.precipitation_probability_max[$i]" $input_file)
-  prec_hours=$(jq -r ".daily.precipitation_hours[$i]" $input_file)
-  wind_speed_d=$(jq -r ".daily.wind_speed_10m_max[$i]" $input_file)
-  echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
-done
+times=$(jq -r '.daily.time[]' "$input_file")
+temp_mins=$(jq -r '.daily.temperature_2m_min[]' "$input_file")
+temp_maxs=$(jq -r '.daily.temperature_2m_max[]' "$input_file")
+prec_probs=$(jq -r '.daily.precipitation_probability_max[]' "$input_file")
+prec_hourss=$(jq -r '.daily.precipitation_hours[]' "$input_file")
+wind_speed_ds=$(jq -r '.daily.wind_speed_10m_max[]' "$input_file")
 
+i=0
+while [ $i -lt 6 ]; do
+  time=$(echo "$times" | sed -n "${i+1}p")
+  temp_min=$(echo "$temp_mins" | sed -n "${i+1}p")
+  temp_max=$(echo "$temp_maxs" | sed -n "${i+1}p")
+  prec_prob=$(echo "$prec_probs" | sed -n "${i+1}p")
+  prec_hours=$(echo "$prec_hourss" | sed -n "${i+1}p")
+  wind_speed_d=$(echo "$wind_speed_ds" | sed -n "${i+1}p")
+  echo "\e[0;36m|  $time |\t$temp_min / $temp_max$temperature_unit\t|\t$prec_prob%\t| $prec_hours h\t|\t$wind_speed_d km/h\e[0m\n"
+  i=`expr $i + 1`
+done
