@@ -1,8 +1,8 @@
 #!/bin/sh
 
-latitude=42.7805
+latitude=45.7805
 longitude=4.7464
-timezone="Europe%2FBerlin"
+timezone="auto"
 
 mkdir -p -m 777 /home/$USER/.meteo
 echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=$timezone" 2> /dev/null) > /home/$USER/.meteo/meteo.json
