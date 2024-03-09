@@ -2,9 +2,10 @@
 
 latitude=42.7805
 longitude=4.7464
+timezone="Europe%2FBerlin"
 
 mkdir -p -m 777 /home/$USER/.meteo
-echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=auto" 2> /dev/null) > /home/$USER/.meteo/meteo.json
+echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude=$longitude&current=temperature_2m,apparent_temperature,is_day,precipitation,wind_speed_10m,wind_direction_10m&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_hours,precipitation_probability_max,wind_speed_10m_max&timezone=$timezone" 2> /dev/null) > /home/$USER/.meteo/meteo.json
 
 input_file="/home/$USER/.meteo/meteo.json"
 
@@ -101,7 +102,7 @@ while [ $i -lt 8 ]; do
   	i=`expr $i + 1`
 done
 
-rm -rf /home/$USER/.meteo
+#rm -rf /home/$USER/.meteo
 
 echo -n "\e[1;33mMeteo has been optimized !\e[0m"
 echo "\e[1;33m - pyven-dr\n\e[0m"
