@@ -9,7 +9,7 @@ echo $(curl "https://api.open-meteo.com/v1/forecast?latitude=$latitude&longitude
 
 input_file="/home/$USER/.meteo/meteo.json"
 
-current_time=`jq -r '.current.time' "$input_file"`
+current_time=$(date "+%A %d %B %Y %T")
 current_temperature=`jq -r '.current.temperature_2m' "$input_file"`
 temperature_unit=`jq -r '.current_units.temperature_2m' "$input_file"`
 apparent_temperature=`jq -r '.current.apparent_temperature' "$input_file"`
