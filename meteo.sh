@@ -102,7 +102,7 @@ while [ $i -lt 8 ]; do
   	i=`expr $i + 1`
 done
 
-#rm -rf /home/$USER/.meteo
+rm -rf /home/$USER/.meteo
 
 echo -n "\e[1;33mMeteo has been optimized !\e[0m"
 echo "\e[1;33m - pyven-dr\n\e[0m"
