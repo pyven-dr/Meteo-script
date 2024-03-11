@@ -1,6 +1,8 @@
 # Meteo Sript
 
-## A simple script that display the weather in the terminal
+## Way better than looking outside 
+
+### A simple script that display the weather in the terminal
 
 That shell script use the api of [open-meteo](https://open-meteo.com/) to display the meteo on a terminal
 
