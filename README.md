@@ -1,4 +1,4 @@
-# Meteo Sript
+# Meteo Script
 
 ## Way better than looking outside 
 
